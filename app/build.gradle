@@ -1,0 +1,101 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdk 31
+
+    defaultConfig {
+        applicationId "com.vaca.udpsameport"
+        minSdk 24
+        targetSdk 31
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+        dataBinding true
+    }
+}
+
+dependencies {
+
+    implementation 'org.greenrobot:eventbus:3.2.0'
+
+    implementation "androidx.room:room-runtime:2.3.0"
+    kapt "androidx.room:room-compiler:2.3.0"
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.30"
+
+    implementation 'com.super_rabbit.wheel_picker:NumberPicker:1.0.1'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.30"
+    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'com.blankj:utilcodex:1.29.0'
+    implementation "com.daimajia.swipelayout:library:1.2.0@aar"
+    implementation 'com.google.zxing:core:3.3.3'
+    implementation "com.squareup.okhttp3:okhttp:4.9.1"
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'no.nordicsemi.android:dfu:1.11.0'
+
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+
+    api "me.jessyan:autosize:1.2.1"
+
+
+
+    implementation 'com.bigkoo:convenientbanner:2.1.5'
+
+
+    implementation  'com.scwang.smart:refresh-layout-kernel:2.0.3'      //核心必须依赖
+    implementation  'com.scwang.smart:refresh-header-classics:2.0.3'    //经典刷新头
+    implementation  'com.scwang.smart:refresh-header-radar:2.0.3'       //雷达刷新头
+    implementation  'com.scwang.smart:refresh-header-falsify:2.0.3'     //虚拟刷新头
+    implementation  'com.scwang.smart:refresh-header-material:2.0.3'    //谷歌刷新头
+    implementation  'com.scwang.smart:refresh-header-two-level:2.0.3'   //二级刷新头
+    implementation  'com.scwang.smart:refresh-footer-ball:2.0.3'        //球脉冲加载
+    implementation  'com.scwang.smart:refresh-footer-classics:2.0.3'    //经典加载
+    implementation 'io.github.jeremyliao:live-event-bus-x:1.8.0'
+    implementation("com.squareup.okhttp3:okhttp:4.9.2")
+    implementation ('io.socket:socket.io-client:2.0.0') {
+        exclude group: 'org.json', module: 'json'
+    }
+    implementation 'org.webrtc:google-webrtc:1.0.32006'
+    api "com.tencent.bugly:crashreport:latest.release"
+    implementation 'com.zxy.android:tiny:1.1.0'
+
+    api "com.github.barteksc:android-pdf-viewer:3.2.0-beta.1"
+    api 'org.jsoup:jsoup:1.12.1'
+
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
