@@ -4,9 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.vaca.udpsameport.databinding.ActivityMainBinding
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.io.IOException
 import java.lang.Exception
+import java.lang.Thread.sleep
 import java.net.InetSocketAddress
 import java.nio.ByteBuffer
 import java.nio.channels.DatagramChannel
@@ -62,8 +65,12 @@ class MainActivity : AppCompatActivity() {
                             val receiveJson=JSONObject(receiveString)
                             val ip=receiveJson.getString("ip")
                             val port=receiveJson.getInt("port")
+                            Log.e("fuckget","$ip      $port")
                             send2Destination("fuck",ip,port)
                         }else{
+                            MainScope().launch {
+                                binding.fuck.text=receiveString
+                            }
                             Log.e("good",receiveString)
                         }
 
@@ -87,7 +94,7 @@ class MainActivity : AppCompatActivity() {
             buf.clear()
             buf.put(configInfo)
             buf.flip()
-            channel.send(buf, InetSocketAddress("192.168.5.101", 8888))
+            channel.send(buf, InetSocketAddress("49.234.92.213", 8888))
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -95,6 +102,7 @@ class MainActivity : AppCompatActivity() {
 
     fun send2Destination(message: String,ip:String,port:Int) {
         try {
+            val buf: ByteBuffer = ByteBuffer.allocate(600)
             val configInfo = message.toByteArray()
             buf.clear()
             buf.put(configInfo)
@@ -123,6 +131,14 @@ class MainActivity : AppCompatActivity() {
             Thread.sleep(100)
             StartListen()
         }.start()
+//        Thread{
+//            while (true){
+//                for(k in 0..65535){
+//                    send2Destination("fuck","113.110.200.176",k)
+//                }
+//            }
+//        }.start()
+
 
 
     }
