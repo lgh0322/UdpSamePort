@@ -13,13 +13,27 @@ import java.nio.channels.DatagramChannel
 
 class MainActivity : AppCompatActivity() {
   lateinit  var channel:DatagramChannel
-    private val buf: ByteBuffer = ByteBuffer.allocate(60)
+    private val buf: ByteBuffer = ByteBuffer.allocate(600)
+    val byteArray=ByteArray(500){
+        0.toByte()
+    }
 
-    val handler=android.os.Handler()
+
+    fun bytebuffer2ByteArray(buffer: ByteBuffer): ByteArray? {
+        buffer.flip()
+        val len = buffer.limit() - buffer.position()
+        val bytes = ByteArray(len)
+        for (i in bytes.indices) {
+            bytes[i] = buffer.get()
+        }
+        return bytes
+    }
+
+
     public fun initUdp(){
         try {
             channel = DatagramChannel.open();
-            channel.socket().bind(InetSocketAddress(23564));
+            channel.socket().bind(InetSocketAddress(8888));
         } catch (e: IOException) {
 
             e.printStackTrace();
@@ -29,38 +43,18 @@ class MainActivity : AppCompatActivity() {
     fun StartListen() {
         while (true) {
             try {
-                buf.clear()
                 channel.receive(buf)
-
-                //获取ByteBuffer的有效内容
-                buf.flip()
-                val bytes = ByteArray(buf.limit())
-                buf[bytes]
-                val msg = Message()
-                val bundle = Bundle()
-
-                //把数据放到buddle中
-                val configMessage = String(bytes)
-                bundle.putString("receive", configMessage)
-                //把buddle传递到message
-                msg.setData(bundle)
-                handler.sendMessage(msg)
+                val gg=bytebuffer2ByteArray(buf)
+                if (gg != null) {
+                    Log.e("receive", gg.size.toString()+"   "+String(gg))
+                }
             } catch (e: Exception) {
-                continue
+                e.printStackTrace()
             }
         }
     }
 
-    var myHandler: Handler = object : Handler() {
-        override fun handleMessage(msg: Message) {
-            super.handleMessage(msg)
-            var bundle = Bundle()
-            //从传过来的message数据中取出传过来的绑定数据的bundle对象
-            bundle = msg.getData()
-            val receive = bundle.getString("receive")
-            Log.e("fuck",receive!!)
-        }
-    }
+
 
     fun send(message: String) {
         try {
@@ -68,7 +62,7 @@ class MainActivity : AppCompatActivity() {
             buf.clear()
             buf.put(configInfo)
             buf.flip()
-            channel.send(buf, InetSocketAddress(SERVER_IP, SERVER_PORT))
+            channel.send(buf, InetSocketAddress("192.168.5.101", 8888))
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -77,6 +71,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initUdp()
-        StartListen()
+        Thread{
+            Thread.sleep(2000)
+            StartListen()
+        }.start()
+
+        Thread{
+            while (true){
+                Thread.sleep(1000)
+                send("futgrdtck")
+            }
+        }.start()
+
+
     }
 }
