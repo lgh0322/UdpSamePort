@@ -2,9 +2,9 @@ package com.vaca.udpsameport
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
 import android.util.Log
+import com.vaca.udpsameport.databinding.ActivityMainBinding
+import org.json.JSONObject
 import java.io.IOException
 import java.lang.Exception
 import java.net.InetSocketAddress
@@ -12,6 +12,13 @@ import java.nio.ByteBuffer
 import java.nio.channels.DatagramChannel
 
 class MainActivity : AppCompatActivity() {
+
+
+    lateinit var binding:ActivityMainBinding
+
+
+
+
   lateinit  var channel:DatagramChannel
     private val buf: ByteBuffer = ByteBuffer.allocate(600)
     private val bufReceive: ByteBuffer = ByteBuffer.allocate(600)
@@ -46,9 +53,25 @@ class MainActivity : AppCompatActivity() {
             try {
                 bufReceive.clear()
                 channel.receive(bufReceive)
-                val gg=bytebuffer2ByteArray(bufReceive)
-                if (gg != null) {
-                    Log.e("receive", gg.size.toString()+"   "+String(gg))
+                val receiveByteArray=bytebuffer2ByteArray(bufReceive)
+                if (receiveByteArray != null) {
+                    val receiveString=String(receiveByteArray)
+
+                    try {
+                        if(receiveString.substring(0,1)=="{"){
+                            val receiveJson=JSONObject(receiveString)
+                            val ip=receiveJson.getString("ip")
+                            val port=receiveJson.getInt("port")
+                            send2Destination("fuck",ip,port)
+                        }else{
+                            Log.e("good",receiveString)
+                        }
+
+                    }catch (e:Exception){
+
+                        e.printStackTrace()
+                    }
+
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -69,11 +92,26 @@ class MainActivity : AppCompatActivity() {
             e.printStackTrace()
         }
     }
+
+    fun send2Destination(message: String,ip:String,port:Int) {
+        try {
+            val configInfo = message.toByteArray()
+            buf.clear()
+            buf.put(configInfo)
+            buf.flip()
+            channel.send(buf, InetSocketAddress(ip, port))
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding= ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         initUdp()
 
+        val gx=JSONObject()
 
         Thread{
             while (true){
@@ -82,7 +120,7 @@ class MainActivity : AppCompatActivity() {
             }
         }.start()
         Thread{
-            Thread.sleep(1)
+            Thread.sleep(100)
             StartListen()
         }.start()
 
