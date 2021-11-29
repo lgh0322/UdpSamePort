@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     fun initUdp(){
         try {
             channel = DatagramChannel.open();
-            channel.socket().bind(InetSocketAddress(8888));
+            channel.socket().bind(InetSocketAddress(13207));
         } catch (e: IOException) {
 
             e.printStackTrace();
@@ -71,16 +71,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initUdp()
-        Thread{
-            Thread.sleep(2000)
-            StartListen()
-        }.start()
+
 
         Thread{
             while (true){
+                send("新官上任干涉fut45546456tck")
                 Thread.sleep(1000)
-                send("fut45546456tck")
             }
+        }.start()
+        Thread{
+            Thread.sleep(1)
+            StartListen()
         }.start()
 
 
