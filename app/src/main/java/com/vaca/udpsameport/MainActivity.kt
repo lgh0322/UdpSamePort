@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    public fun initUdp(){
+    fun initUdp(){
         try {
             channel = DatagramChannel.open();
             channel.socket().bind(InetSocketAddress(8888));
@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         Thread{
             while (true){
                 Thread.sleep(1000)
-                send("futgrdtck")
+                send("fut45546456tck")
             }
         }.start()
 
