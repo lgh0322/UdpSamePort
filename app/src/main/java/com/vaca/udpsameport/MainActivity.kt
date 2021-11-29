@@ -14,6 +14,7 @@ import java.nio.channels.DatagramChannel
 class MainActivity : AppCompatActivity() {
   lateinit  var channel:DatagramChannel
     private val buf: ByteBuffer = ByteBuffer.allocate(600)
+    private val bufReceive: ByteBuffer = ByteBuffer.allocate(600)
     val byteArray=ByteArray(500){
         0.toByte()
     }
@@ -43,8 +44,9 @@ class MainActivity : AppCompatActivity() {
     fun StartListen() {
         while (true) {
             try {
-                channel.receive(buf)
-                val gg=bytebuffer2ByteArray(buf)
+                bufReceive.clear()
+                channel.receive(bufReceive)
+                val gg=bytebuffer2ByteArray(bufReceive)
                 if (gg != null) {
                     Log.e("receive", gg.size.toString()+"   "+String(gg))
                 }
@@ -75,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 
         Thread{
             while (true){
-                send("新官上任干涉fut45546456tck")
+                send("{}")
                 Thread.sleep(1000)
             }
         }.start()
